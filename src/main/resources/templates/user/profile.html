@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html data-th-replace="~{base::parent(~{::#content},~{::title},~{::script})}">
+<head>
+    <title data-th-text="${loggedInUser.name} +  '|contactXpro'"></title>
+</head>
+<body>
+
+<div id="content">
+
+    <!-- Side Bar -->
+    <div data-th-if="${loggedInUser}" data-th-replace="~{user/sidebar::side_bar}"></div>
+
+    <div class="sm:pl-64 pt-20">
+        <div class="flex justify-center item-center pr-10">
+            <h1 class="text-3xl font-bold">Profile Page</h1>
+        </div>
+    </div>
+
+</div>
+
+<script>console.log("Hello Profile Page");</script>
+
+</body>
+</html>

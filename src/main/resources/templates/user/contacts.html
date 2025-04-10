@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html data-th-replace="~{base::parent(~{::#content},~{::title},~{::script})}">
+<head>
+    <meta charset="UTF-8">
+    <title>ALL Contacts</title>
+</head>
+<body>
+
+<!-- ========== Main Content Wrapper ========== -->
+<div id="content">
+
+    <!-- ========== Side Bar ========== -->
+    <div data-th-if="${loggedInUser}">
+        <th:block data-th-replace="~{user/sidebar::side_bar}"></th:block>
+    </div>
+      
+    <!-- ========== Page Title Section ========== -->
+    <div class="sm:pl-64 pt-20">
+        <div class="text-center p-5">
+                 
+                   
+            <h2 class="text-3xl font-bold mb-2">Contacts Page</h2>
+            <p class="text-gray-500 mb-2">Easily view and manage all your saved contacts in one place.</p>
+        </div>
+                
+        <!-- ========== Contacts Table Section ========== -->
+        <div class="shadow-2xl shadow-blue-400/50 ring-1 ring-blue-300 rounded-xl m-5 p-5 bg-white dark:bg-gray-800">
+
+             <form action="" data-th-action="@{'/user/search'}"
+             method="get"
+             data-th-object="${searchContactForm}"
+             >
+             
+               <!--  Alert Messgae     -->
+                    <div data-th-replace="~{message::messagebox}"></div>
+             
+            <!-- ========== Action Dropdown + Search Bar ========== -->
+            <div class="space-x-2 flex justify-start items-center p-4 bg-yellow-900 dark:bg-gray-900 rounded-lg shadow-md dark:shadow-blue-900">
+                <!-- Action Dropdown -->
+                <div class="relative">
+                    <!-- search -->
+						<div>
+							 <select  data-th-field="*{field}" id="countries_disabled"
+								class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+								<option  selected value="">Choose Field</option>
+								<option value="name">name</option>
+								<option value="email">email</option>
+								<option value="phoneNumber">phoneNumber</option>
+								
+							</select>
+
+						</div>
+						<!-- Dropdown menu -->
+                    <div id="dropdownAction"
+                         class="z-10 hidden absolute bg-white dark:bg-gray-700 divide-y divide-gray-100 dark:divide-gray-600 rounded-lg shadow-lg w-44 mt-2">
+                        <ul class="py-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownActionButton">
+                            <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Reward</a></li>
+                            <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Promote</a></li>
+                            <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Activate account</a></li>
+                        </ul>
+                        <div class="py-1">
+                            <a href="#" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Delete User</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Search Bar -->
+                
+                <div class="relative w-80">
+                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                        <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none"
+                             viewBox="0 0 20 20">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                        </svg>
+                    </div>
+                    <input data-th-field="*{value}" type="text" id="table-search-users"
+                           class="block w-full p-2 pl-10 text-sm text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:placeholder-gray-400"
+                           placeholder="Search for users">
+                          
+                </div>
+               <button type="submit" class="ml-2 px-2 py-2 text-white bg-blue-800 rounded">search</button>
+            </div>
+           </form>
+           
+            <!-- ========== Table ========== -->
+            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 shadow-md mt-4">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
+                    <tr>
+                        <th class="px-6 py-3">Name</th>
+                        <th class="px-6 py-3">Phone</th>
+                        <th class="px-6 py-3">Links</th>
+                        <th class="px-6 py-3">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr 
+                    
+                    th:each="c : ${pageContacts.content}" class="border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                        <td class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
+                            <img 
+                                onError="this.onerror=null;this.src='https://i.pinimg.com/originals/7f/68/ac/7f68acb663d431378b700b080a05e0e3.jpg'"
+                                data-th-src="@{*{c.picture}}" 
+                                class="w-10 h-10 rounded-full" 
+                                src="/docs/images/people/profile-picture-1.jpg" 
+                                alt="User image">
+                            <div class="pl-3">
+                                <div data-th-text="${c.name}" class="text-base font-semibold">Name</div>
+                                <div data-th-text="${c.email}" class="font-normal text-gray-500">Email</div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <i class="fa-solid w-4 h-4 fa-phone"></i>
+                            <span data-th-text="${c.phoneNumber}"></span>
+                        </td>
+                        <td class="px-6 py-4">
+                            <div class="flex items-center space-x-2">
+                                <div data-th-if="${c.favourite}" class="w-3 h-3 rounded-full bg-green-500"></div>
+                                <a data-th-href="${c.websiteLink}" class="fa-solid fa-link text-blue-600 hover:text-blue-800 text-lg"></a>
+                                <a data-th-href="${c.linkedinLink}" class="fa-brands fa-linkedin text-blue-500 hover:text-blue-700 text-lg"></a>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <div class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
+                                <a data-th-href="@{'/user/contact/view/'+${c.contactId}}" class="fa-solid fa-pen w-6 h-6 p-2"></a>
+             
+                                
+                                <!-- Delete Componet -->  
+                        <a data-th-href="@{'/contact/delete/' + ${c.contactId}}" class="fa-solid fa-trash h-6 w-6 p-2"></a>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- ========== Pagination Section ========== -->
+            <div class="pagination_Container mb-6 mt-6 text-center">
+                <nav aria-label="Page navigation example">
+                    <ul class="inline-flex -space-x-px text-base h-10">
+                        <li data-th-unless="${pageContacts.isFirst}">
+                            <a data-th-href="@{'/user/view?&size='+${pageSize}+'&page='+${pageContacts.number-1}}"
+                               class="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                                Previous
+                            </a>
+                        </li>
+                        <li data-th-each="index:${#numbers.sequence(0,pageContacts.totalPages-1)}">
+                            <a data-th-href="@{'/user/view?&size='+${pageSize}+'&page='+${index}}"
+                               data-th-classappend="${index==pageContacts.number?'bg-blue-500 text-white':'bg-white dark:bg-gray-800'}"
+                               class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 border border-gray-300 hover:bg-blue-100 hover:text-gray-700 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                                <span data-th-text="${index+1}"></span>
+                            </a>
+                        </li>
+                        <li data-th-unless="${pageContacts.isLast}">
+                            <a data-th-href="@{'/user/view?&size='+${pageSize}+'&page='+${pageContacts.number+1}}"
+                               class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                                Next
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+
+        </div>
+    </div>
+   
+</div>
+
+<!-- ========== Script Debug Console ========== -->
+<script
+
+>
+    console.log("Dashboard page loaded");
+</script>
+
+
+</body>
+</html>
